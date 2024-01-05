@@ -1,3 +1,4 @@
+import { viteBundler } from "@payloadcms/bundler-vite"
 import { webpackBundler } from "@payloadcms/bundler-webpack"
 import { mongooseAdapter } from "@payloadcms/db-mongodb"
 import { slateEditor } from "@payloadcms/richtext-slate"
@@ -11,7 +12,7 @@ export default buildConfig({
     admin: "/sell",
   },
   admin: {
-    bundler: webpackBundler(),
+    bundler: viteBundler(),
     meta: {
       titleSuffix: "- DigitalHippo",
       favicon: "/favicon.ico",
