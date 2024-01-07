@@ -28,7 +28,6 @@ const Page = () => {
     console.log("TEST ", email, password)
     // signIn({ email, password })
   }
-console.log('TEST errors.password',errors.password )
 
   return (
     <>
