@@ -32,29 +32,30 @@ const Page = () => {
 
   const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
     onError: (err) => {
-      console.log("TEST onError")
-      // if (err.data?.code === "CONFLICT") {
-      //   toast.error("This email is already in use. Sign in instead?")
+      if (err.data?.code === "CONFLICT") {
+        toast.error("This email is already in use. Sign in instead?")
 
-      //   return
-      // }
+        return
+      }
 
-      // if (err instanceof ZodError) {
-      //   toast.error(err.issues[0].message)
+  
 
-      //   return
-      // }
+      if (err instanceof ZodError) {
+        toast.error(err.issues[0].message)
 
-      // toast.error("Something went wrong. Please try again.")
+        return
+      }
+
+      toast.error("Something went wrong. Please try again.")
     },
     onSuccess: ({ sentToEmail }) => {
-      console.log("TEST onSuccess")
-      // toast.success(`Verification email sent to ${sentToEmail}.`)
-      // router.push("/verify-email?to=" + sentToEmail)
+      toast.success(`Verification email sent to ${sentToEmail}.`)
+      router.push("/verify-email?to=" + sentToEmail)
     },
   })
 
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
+
     mutate({ email, password })
   }
 
