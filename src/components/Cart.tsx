@@ -15,11 +15,25 @@ import Link from "next/link"
 import { buttonVariants } from "./ui/button"
 import { Separator } from "./ui/separator"
 import { formatPrice } from "@/lib/utils"
+import { useCart } from "@/hooks/use-cart"
+import CartItem from "./CartItem"
+import { ScrollArea } from "./ui/scroll-area"
+import { useEffect, useState } from "react"
 
 const Cart = () => {
-  const itemCount = 0
-  const fee = 20
-  const cartTotal = 100
+  const { items } = useCart()
+
+  const [isMounted, setIsMounted] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const itemCount = isMounted ? items.length : 0
+  const fee = 1
+  const cartTotal = items.reduce((total, { product }) => {
+    return total + product.price
+  }, 0)
 
   return (
     <Sheet>
@@ -29,7 +43,7 @@ const Cart = () => {
           aria-hidden="true"
         />
         <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-          1
+          {itemCount}
         </span>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
@@ -40,13 +54,11 @@ const Cart = () => {
         {itemCount > 0 ? (
           <>
             <div className="flex w-full flex-col pr-6">
-              {/* TODO: */}
-              cart items
-              {/* <ScrollArea>
-                {items.map(({ product }) => (
-                  <CartItem product={product} key={product.id} />
+              <ScrollArea className="h-[500px]">
+                {items.map(({ product }, index) => (
+                  <CartItem product={product} index={index} key={product.id} />
                 ))}
-              </ScrollArea> */}
+              </ScrollArea>
             </div>
             <div className="space-y-4 pr-6">
               <Separator />
@@ -80,9 +92,7 @@ const Cart = () => {
             </div>
           </>
         ) : (
-          <div
-            className="flex h-full flex-col items-center justify-center space-y-1"
-          >
+          <div className="flex h-full flex-col items-center justify-center space-y-1">
             <div
               aria-hidden="true"
               className="relative mb-4 h-60 w-60 text-muted-foreground"
@@ -93,11 +103,7 @@ const Cart = () => {
                 alt="empty shopping cart hippo"
               />
             </div>
-            <div
-            className="text-xl font-semibold"
-            >
-              Your cart is empty
-            </div>
+            <div className="text-xl font-semibold">Your cart is empty</div>
             <SheetTrigger asChild>
               <Link
                 href="/products"
