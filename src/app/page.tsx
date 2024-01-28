@@ -51,7 +51,7 @@ export default function Home() {
           title="Trending"
           subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
           query={{ limit: 4, sort: "desc" }}
-          href="www.google.com"
+          href="/products"
         />
       </MaxWidthWrapper>
 
